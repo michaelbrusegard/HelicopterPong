@@ -20,6 +20,7 @@ class HelicopterPongGame : ApplicationAdapter() {
     private val score = Score()
     private var gameTimer = 0f
     private var gameStarted = false
+    private var gameOver = false
 
     override fun create() {
         initializeGraphics()
@@ -45,13 +46,20 @@ class HelicopterPongGame : ApplicationAdapter() {
         gameTimer += deltaTime
 
         update(deltaTime)
-        renderer.render(ball, leftPaddle, rightPaddle, score, deltaTime, gameStarted)
+        renderer.render(ball, leftPaddle, rightPaddle, score, deltaTime, gameStarted, gameOver)
     }
 
     private fun update(deltaTime: Float) {
         if (!gameStarted) {
             if (Gdx.input.isTouched || Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ANY_KEY)) {
                 gameStarted = true
+            }
+            return
+        }
+
+        if (gameOver) {
+            if (Gdx.input.isTouched || Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ANY_KEY)) {
+                resetGame()
             }
             return
         }
@@ -65,10 +73,16 @@ class HelicopterPongGame : ApplicationAdapter() {
         when (scorer) {
             1 -> {
                 score.player1++
+                if (score.player1 >= GameConfig.WINNING_SCORE) {
+                    gameOver = true
+                }
                 resetRound()
             }
             2 -> {
                 score.player2++
+                if (score.player2 >= GameConfig.WINNING_SCORE) {
+                    gameOver = true
+                }
                 resetRound()
             }
         }
@@ -102,6 +116,14 @@ class HelicopterPongGame : ApplicationAdapter() {
         leftPaddle.height = GameConfig.INITIAL_PADDLE_HEIGHT
         rightPaddle.height = GameConfig.INITIAL_PADDLE_HEIGHT
         ball.reset(gameTimer)
+    }
+
+    private fun resetGame() {
+        score.player1 = 0
+        score.player2 = 0
+        gameOver = false
+        gameStarted = false
+        resetRound()
     }
 
     override fun dispose() {

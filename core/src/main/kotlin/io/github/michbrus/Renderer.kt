@@ -25,6 +25,7 @@ class Renderer(
         score: Score,
         deltaTime: Float,
         gameStarted: Boolean,
+        gameOver: Boolean = false,
     ) {
         backgroundManager.update(deltaTime)
         ScreenUtils.clear(255f / 255f, 24f / 255f, 252f / 255f, 1f)
@@ -35,7 +36,43 @@ class Renderer(
 
         if (!gameStarted) {
             renderStartMessage()
+        } else if (gameOver) {
+            renderWinMessage(score)
         }
+    }
+
+    private fun renderWinMessage(score: Score) {
+        batch.begin()
+        scoreFont.setColor(startMessageColor)
+
+        val winner = if (score.player1 > score.player2) "Player" else "Computer"
+        val message1 = "$winner Wins!"
+        val message2 = "Press any key to restart"
+
+        val screenHeight = Gdx.graphics.height.toFloat()
+        val screenWidth = Gdx.graphics.width.toFloat()
+
+        val centerY = screenHeight / 2
+        val lineHeight = scoreFont.lineHeight
+        val totalHeight = lineHeight * 2
+        val startY = centerY + (totalHeight / 2)
+
+        scoreFont.draw(
+            batch,
+            message1,
+            screenWidth / 2 - scoreFont.spaceXadvance * message1.length / 2,
+            startY,
+        )
+
+        scoreFont.draw(
+            batch,
+            message2,
+            screenWidth / 2 - scoreFont.spaceXadvance * message2.length / 2,
+            startY - lineHeight,
+        )
+
+        scoreFont.setColor(Color.WHITE)
+        batch.end()
     }
 
     private fun renderStartMessage() {

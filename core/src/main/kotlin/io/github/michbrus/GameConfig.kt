@@ -11,4 +11,5 @@ object GameConfig {
     const val PADDLE_SPEED = 400f
     const val AI_REACTION_DISTANCE = 250f
     const val AI_PREDICTION_ERROR = 30f
+    const val WINNING_SCORE = 21
 }
