@@ -19,6 +19,7 @@ class HelicopterPongGame : ApplicationAdapter() {
     private lateinit var aiController: AIController
     private val score = Score()
     private var gameTimer = 0f
+    private var gameStarted = false
 
     override fun create() {
         initializeGraphics()
@@ -44,10 +45,17 @@ class HelicopterPongGame : ApplicationAdapter() {
         gameTimer += deltaTime
 
         update(deltaTime)
-        renderer.render(ball, leftPaddle, rightPaddle, score, deltaTime)
+        renderer.render(ball, leftPaddle, rightPaddle, score, deltaTime, gameStarted)
     }
 
     private fun update(deltaTime: Float) {
+        if (!gameStarted) {
+            if (Gdx.input.isTouched || Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ANY_KEY)) {
+                gameStarted = true
+            }
+            return
+        }
+
         handleInput(deltaTime)
         leftPaddle.update(deltaTime)
         rightPaddle.update(deltaTime)
