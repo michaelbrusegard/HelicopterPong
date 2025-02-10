@@ -4,6 +4,10 @@ HelicopterPong is a simple pong game with helicopters flying around and collidin
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
+## Video
+
+https://github.com/user-attachments/assets/8bc08d40-129f-44ff-aab8-764c64d94d06
+
 ## Platforms
 
 - `core`: Main module with the application logic shared by all platforms.
