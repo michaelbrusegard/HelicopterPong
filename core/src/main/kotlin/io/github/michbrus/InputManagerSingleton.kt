@@ -3,30 +3,39 @@ package io.github.michbrus
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 
-object InputManagerSingleton {
+interface InputController {
     fun handleInput(
         deltaTime: Float,
-        leftPaddle: Paddle,
+        paddle: Paddle,
+    )
+
+    fun isAnyInput(): Boolean
+}
+
+object InputManagerSingleton : InputController {
+    override fun handleInput(
+        deltaTime: Float,
+        paddle: Paddle,
     ) {
-        handleTouchInput(deltaTime, leftPaddle)
-        handleKeyboardInput(deltaTime, leftPaddle)
+        handleTouchInput(deltaTime, paddle)
+        handleKeyboardInput(deltaTime, paddle)
     }
 
-    fun isAnyTouchOrKeyPressed(): Boolean = Gdx.input.isTouched || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
+    override fun isAnyInput(): Boolean = Gdx.input.isTouched || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
 
     private fun handleTouchInput(
         deltaTime: Float,
-        leftPaddle: Paddle,
+        paddle: Paddle,
     ) {
         if (Gdx.input.isTouched) {
             val touchY = Gdx.graphics.height - Gdx.input.y
-            val paddleCenter = leftPaddle.y + leftPaddle.height / 2
+            val paddleCenter = paddle.y + paddle.height / 2
 
             if (Math.abs(touchY - paddleCenter) > 10) {
                 if (touchY > paddleCenter) {
-                    leftPaddle.move(GameConfig.PADDLE_SPEED * deltaTime)
+                    paddle.move(GameConfig.PADDLE_SPEED * deltaTime)
                 } else {
-                    leftPaddle.move(-GameConfig.PADDLE_SPEED * deltaTime)
+                    paddle.move(-GameConfig.PADDLE_SPEED * deltaTime)
                 }
             }
         }
@@ -34,13 +43,13 @@ object InputManagerSingleton {
 
     private fun handleKeyboardInput(
         deltaTime: Float,
-        leftPaddle: Paddle,
+        paddle: Paddle,
     ) {
         if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            leftPaddle.move(GameConfig.PADDLE_SPEED * deltaTime)
+            paddle.move(GameConfig.PADDLE_SPEED * deltaTime)
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            leftPaddle.move(-GameConfig.PADDLE_SPEED * deltaTime)
+            paddle.move(-GameConfig.PADDLE_SPEED * deltaTime)
         }
     }
 }

@@ -8,36 +8,61 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.utils.ScreenUtils
 
+interface GameView {
+    fun render(gameState: GameViewState)
+
+    fun resize(
+        width: Int,
+        height: Int,
+    )
+}
+
+data class GameViewState(
+    val ball: Ball,
+    val leftPaddle: Paddle,
+    val rightPaddle: Paddle,
+    val score: Score,
+    val deltaTime: Float,
+    val gameStarted: Boolean,
+    val gameOver: Boolean,
+)
+
 class Renderer(
     private val batch: SpriteBatch,
     private val shapeRenderer: ShapeRenderer,
     private val scoreFont: BitmapFont,
     private val backgroundManagerSingleton: BackgroundManagerSingleton,
-) {
+) : GameView,
+    ScoreObserver {
     private val paddleColor = Color(1f, 1f, 1f, 1f)
     private val ballColor = Color(1f, 0.8f, 0.2f, 1f)
     private val startMessageColor = Color(1f, 1f, 1f, 1f)
 
-    fun render(
-        ball: Ball,
-        leftPaddle: Paddle,
-        rightPaddle: Paddle,
-        score: Score,
-        deltaTime: Float,
-        gameStarted: Boolean,
-        gameOver: Boolean = false,
+    private var scoreFlashTimer = 0f
+    private var isScoreFlashing = false
+
+    override fun onScoreChanged(
+        player1: Int,
+        player2: Int,
     ) {
-        backgroundManagerSingleton.update(deltaTime)
-        ScreenUtils.clear(255f / 255f, 24f / 255f, 252f / 255f, 1f)
+        isScoreFlashing = true
+        scoreFlashTimer = 0.5f
+    }
 
-        renderBackground()
-        renderGameObjects(ball, leftPaddle, rightPaddle)
-        renderScore(score)
+    override fun render(gameState: GameViewState) {
+        with(gameState) {
+            backgroundManagerSingleton.update(deltaTime)
+            ScreenUtils.clear(255f / 255f, 24f / 255f, 252f / 255f, 1f)
 
-        if (!gameStarted) {
-            renderStartMessage()
-        } else if (gameOver) {
-            renderWinMessage(score)
+            renderBackground()
+            renderGameObjects(ball, leftPaddle, rightPaddle)
+            renderScore(score)
+
+            if (!gameStarted) {
+                renderStartMessage()
+            } else if (gameOver) {
+                renderWinMessage(score)
+            }
         }
     }
 
@@ -139,12 +164,24 @@ class Renderer(
 
     private fun renderScore(score: Score) {
         batch.begin()
+        if (isScoreFlashing) {
+            scoreFlashTimer -= Gdx.graphics.deltaTime
+            if (scoreFlashTimer <= 0f) {
+                isScoreFlashing = false
+            }
+            scoreFont.setColor(1f, 1f, 0f, 1f)
+        } else {
+            scoreFont.setColor(Color.WHITE)
+        }
+
         scoreFont.draw(batch, "${score.player1}", Gdx.graphics.width * 0.25f, Gdx.graphics.height - 50f)
         scoreFont.draw(batch, "${score.player2}", Gdx.graphics.width * 0.75f, Gdx.graphics.height - 50f)
+
+        scoreFont.setColor(Color.WHITE)
         batch.end()
     }
 
-    fun resize(
+    override fun resize(
         width: Int,
         height: Int,
     ) {

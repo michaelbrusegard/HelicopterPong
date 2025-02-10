@@ -2,7 +2,6 @@ package io.github.michbrus
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import io.github.michbrus.GameManagerSingleton
 
 class HelicopterPongGame : ApplicationAdapter() {
     override fun create() {

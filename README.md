@@ -6,7 +6,7 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 ## Video
 
-https://github.com/user-attachments/assets/8bc08d40-129f-44ff-aab8-764c64d94d06
+<https://github.com/user-attachments/assets/8bc08d40-129f-44ff-aab8-764c64d94d06>
 
 ## Platforms
 
@@ -33,3 +33,7 @@ Then to create the build .jar file use the following command:
 ```
 
 The `.jar` file will be stored in the `lwjgl3/build/libs` directory.
+
+## Report
+
+You can find the report [here](Software%20Architecture%20Patterns.pdf)
