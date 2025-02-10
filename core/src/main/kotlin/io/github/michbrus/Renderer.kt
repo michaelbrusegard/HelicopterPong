@@ -126,7 +126,13 @@ class Renderer(
         shapeRenderer.rect(rightPaddle.x, rightPaddle.y, GameConfig.PADDLE_WIDTH, rightPaddle.height)
 
         shapeRenderer.setColor(ballColor)
-        shapeRenderer.circle(ball.x, ball.y, GameConfig.BALL_SIZE)
+        shapeRenderer.rectLine(
+            ball.x - GameConfig.BALL_SIZE,
+            ball.y,
+            ball.x + GameConfig.BALL_SIZE,
+            ball.y,
+            GameConfig.BALL_SIZE * 2,
+        )
 
         shapeRenderer.end()
     }
@@ -136,5 +142,13 @@ class Renderer(
         scoreFont.draw(batch, "${score.player1}", Gdx.graphics.width * 0.25f, Gdx.graphics.height - 50f)
         scoreFont.draw(batch, "${score.player2}", Gdx.graphics.width * 0.75f, Gdx.graphics.height - 50f)
         batch.end()
+    }
+
+    fun resize(
+        width: Int,
+        height: Int,
+    ) {
+        batch.projectionMatrix.setToOrtho2D(0f, 0f, width.toFloat(), height.toFloat())
+        shapeRenderer.projectionMatrix.setToOrtho2D(0f, 0f, width.toFloat(), height.toFloat())
     }
 }

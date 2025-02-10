@@ -17,4 +17,11 @@ class HelicopterPongGame : ApplicationAdapter() {
     override fun dispose() {
         GameManagerSingleton.dispose()
     }
+
+    override fun resize(
+        width: Int,
+        height: Int,
+    ) {
+        GameManagerSingleton.resize(width, height)
+    }
 }

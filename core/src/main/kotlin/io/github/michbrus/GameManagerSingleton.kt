@@ -65,7 +65,7 @@ object GameManagerSingleton {
         InputManagerSingleton.handleInput(deltaTime, leftPaddle)
         leftPaddle.update(deltaTime)
         rightPaddle.update(deltaTime)
-        aiController.update(deltaTime, ball, Gdx.graphics.width.toFloat())
+        aiController.update(deltaTime, ball)
 
         val scorer = ball.update(deltaTime, leftPaddle, rightPaddle)
         handleScoring(scorer)
@@ -125,5 +125,12 @@ object GameManagerSingleton {
         BackgroundManagerSingleton.dispose()
         shapeRenderer.dispose()
         scoreFont.dispose()
+    }
+
+    fun resize(
+        width: Int,
+        height: Int,
+    ) {
+        renderer.resize(width, height)
     }
 }
