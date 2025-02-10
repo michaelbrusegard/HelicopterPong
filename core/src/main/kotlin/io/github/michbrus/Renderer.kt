@@ -12,7 +12,7 @@ class Renderer(
     private val batch: SpriteBatch,
     private val shapeRenderer: ShapeRenderer,
     private val scoreFont: BitmapFont,
-    private val backgroundManager: BackgroundManager,
+    private val backgroundManagerSingleton: BackgroundManagerSingleton,
 ) {
     private val paddleColor = Color(1f, 1f, 1f, 1f)
     private val ballColor = Color(1f, 0.8f, 0.2f, 1f)
@@ -27,7 +27,7 @@ class Renderer(
         gameStarted: Boolean,
         gameOver: Boolean = false,
     ) {
-        backgroundManager.update(deltaTime)
+        backgroundManagerSingleton.update(deltaTime)
         ScreenUtils.clear(255f / 255f, 24f / 255f, 252f / 255f, 1f)
 
         renderBackground()
@@ -110,7 +110,7 @@ class Renderer(
 
     private fun renderBackground() {
         batch.begin()
-        backgroundManager.render(batch)
+        backgroundManagerSingleton.render(batch)
         batch.end()
     }
 

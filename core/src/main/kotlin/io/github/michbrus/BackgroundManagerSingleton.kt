@@ -4,12 +4,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
-class BackgroundManager {
-    companion object {
-        private const val MIN_SPEED = -100f
-        private const val MAX_SPEED = 100f
-        private const val FRAME_TIME = 0.1f
-    }
+object BackgroundManagerSingleton {
+    private const val MIN_SPEED = -100f
+    private const val MAX_SPEED = 100f
+    private const val FRAME_TIME = 0.1f
 
     private val helicopterFrames = mutableListOf<Texture>()
     private val helicopters = mutableListOf<Helicopter>()
